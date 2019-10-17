@@ -22,8 +22,8 @@ const Service = require('./service');
 class Class extends Service
 {
 	/**
-	 * @param {any} factory
-	 * @param {boolean|void} readonly
+	 * @param {function} factory
+	 * @param {boolean} readonly
 	 * @throws {Error}
 	 */
 	constructor(factory, readonly){

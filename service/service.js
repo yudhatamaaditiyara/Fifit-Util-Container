@@ -22,7 +22,7 @@ class Service
 {
 	/**
 	 * @param {any} factory
-	 * @param {boolean|void} readonly
+	 * @param {boolean} readonly
 	 */
 	constructor(factory, readonly){
 		this.factory = factory;

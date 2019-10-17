@@ -23,7 +23,7 @@ class Factory extends Service
 {
 	/**
 	 * @param {function} factory
-	 * @param {boolean|void} readonly
+	 * @param {boolean} readonly
 	 * @throws {Error}
 	 */
 	constructor(factory, readonly){
