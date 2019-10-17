@@ -6,5 +6,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yudhatamaaditiyara/Fifit-Util-Container.git"
+  },
+  "dependencies": {
+    "ganiyem-util-throwable": "1.0.1"
   }
 }

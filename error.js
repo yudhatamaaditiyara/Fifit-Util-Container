@@ -15,9 +15,11 @@
  */
 'use strict';
 
+const Throwable = require('ganiyem-util-throwable');
+
 /**
  */
-class Error extends global.Error
+class Error extends Throwable
 {}
 
 /**
