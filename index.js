@@ -15,6 +15,220 @@
  */
 'use strict';
 
+const Service = require('./service/service');
+const Value = require('./service/value');
+const Class = require('./service/class');
+const Factory = require('./service/factory');
+
 /**
  */
-module.exports = require('./container');
+class Container
+{
+	/**
+	 * @constructor
+	 */
+	constructor(){
+		this._services = {};
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @throws {Error}
+	 * @returns {Service}
+	 */
+	get(name){
+		if (!this.isExists(name)) {
+			throw new Error(`The service '${name}' not found`);
+		}
+		return this._services[name];
+	}
+	
+	/**
+	 * @param {string|symbol} name
+	 * @param {Service} service
+	 * @throws {Error}
+	 * @returns {Container}
+	 */
+	set(name, service){
+		if (!(service instanceof Service)) {
+			throw new Error('The service must be instance of Service');
+		}
+		if (this.isReadonly(name)) {
+			throw new Error(`The service '${name}' cannot be overridden`);
+		}
+		Object.defineProperty(this._services, name, {value: service, writable: service.readonly === false, enumerable: true});
+		return this;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {Service} service
+	 * @returns {Container}
+	 */
+	setIfNotExists(name, service){
+		if (!this.isExists(name)) {
+			this.set(name, service);
+		}
+		return this;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {Service} service
+	 * @returns {Container}
+	 */
+	setIfNotReadonly(name, service){
+		if (!this.isExists(name)) {
+			this.set(name, service);
+		}
+		return this;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @returns {boolean}
+	 */
+	isExists(name){
+		return Object.prototype.hasOwnProperty.call(this._services, name);
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @returns {boolean}
+	 */
+	isReadonly(name){
+		let descriptor = Object.getOwnPropertyDescriptor(this._services, name);
+		return !!descriptor && !descriptor.writable;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {Array} args
+	 * @returns {any}
+	 */
+	resolve(name, args = []){
+		return this.get(name).resolve(args);
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {Array} args
+	 * @returns {any}
+	 */
+	create(name, args = []){
+		return this.get(name).create(args);
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {any} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	value(name, factory, readonly){
+		return this.set(name, new Value(factory, readonly));
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {any} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	valueIfNotExists(name, factory, readonly){
+		if (!this.isExists(name)) {
+			this.value(name, factory, readonly);
+		}
+		return this;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {any} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	valueIfNotReadonly(name, factory, readonly){
+		if (!this.isReadonly(name)) {
+			this.value(name, factory, readonly);
+		}
+		return this;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {function} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	class(name, factory, readonly){
+		return this.set(name, new Class(factory, readonly));
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {function} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	classIfNotExists(name, factory, readonly){
+		if (!this.isExists(name)) {
+			this.class(name, factory, readonly);
+		}
+		return this;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {function} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	classIfNotReadonly(name, factory, readonly){
+		if (!this.isReadonly(name)) {
+			this.class(name, factory, readonly);
+		}
+		return this;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {function} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	factory(name, factory, readonly){
+		return this.set(name, new Factory(factory, readonly));
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {function} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	factoryIfNotExists(name, factory, readonly){
+		if (!this.isExists(name)) {
+			this.factory(name, factory, readonly);
+		}
+		return this;
+	}
+
+	/**
+	 * @param {string|symbol} name
+	 * @param {function} factory
+	 * @param {boolean} readonly
+	 * @returns {Container}
+	 */
+	factoryIfNotReadonly(name, factory, readonly){
+		if (!this.isReadonly(name)) {
+			this.factory(name, factory, readonly);
+		}
+		return this;
+	}
+}
+
+/**
+ * @+
+ */
+module.exports = Container;
