@@ -18,7 +18,6 @@
 const Service = require('./service');
 
 /**
- * @abstract
  */
 class Value extends Service
 {}

@@ -19,7 +19,6 @@ const Error = require('../error');
 const Service = require('./service');
 
 /**
- * @abstract
  */
 class Factory extends Service
 {
