@@ -56,7 +56,7 @@ class Container
 		if (this.isReadonly(name)) {
 			throw new Error(`The service '${name}' cannot be overridden`);
 		}
-		Object.defineProperty(this._services, name, {value: service, writable: !service.readonly});
+		Object.defineProperty(this._services, name, {value: service, writable: !service.readonly, enumerable: true});
 		return this;
 	}
 
