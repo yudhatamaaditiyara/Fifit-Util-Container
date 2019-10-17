@@ -15,7 +15,6 @@
  */
 'use strict';
 
-const Error = require('./error');
 const Service = require('./service/service');
 const Value = require('./service/value');
 const Class = require('./service/class');
