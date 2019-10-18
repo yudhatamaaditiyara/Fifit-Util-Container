@@ -38,7 +38,7 @@ class Class extends Service
 	 * @returns {Object}
 	 */
 	resolve(args = []){
-		return this.instance || (this.instance = this.create(args));
+		return this.exports || (this.exports = this.create(args));
 	}
 
 	/**
