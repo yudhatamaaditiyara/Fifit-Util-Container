@@ -78,7 +78,7 @@ class Container
 	 * @returns {Container}
 	 */
 	setIfNotReadonly(name, service){
-		if (!this.isExists(name)) {
+		if (!this.isReadonly(name)) {
 			this.set(name, service);
 		}
 		return this;
